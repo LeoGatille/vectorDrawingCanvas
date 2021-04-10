@@ -16,6 +16,7 @@ export default class Drawing {
 
     private initPath() {
         this.ctx.beginPath();
+        // this.ctx.lineWidth = 20
         //! WARNING do not use canvas offset might be troubles here !
         this.ctx.moveTo(this.originPoint.x, this.originPoint.y);
     }
@@ -24,14 +25,21 @@ export default class Drawing {
         if (this.path.length) {
             this.path.forEach((point, i) => {
                 if (i % 2) {
-                    this.ctx.bezierCurveTo(
-                        i > 0 ? this.path[i - 1].x : this.originPoint.x,
-                        i > 0 ? this.path[i - 1].y : this.originPoint.y,
-                        point.x,
-                        point.y,
-                        i === this.path.length ? point.x : this.path[i + 1].x,
-                        i === this.path.length ? point.y : this.path[i + 1].y
-                    );
+
+
+                    // this.ctx.bezierCurveTo(
+                    //     i > 0 ? this.path[i - 1].x : this.originPoint.x,
+                    //     i > 0 ? this.path[i - 1].y : this.originPoint.y,
+                    //     point.x,
+                    //     point.y,
+                    //      point.x,
+                    //      point.y
+                    // );
+                    const curveControl = {
+                        x: (point.x + this.path[i - 1].x) / 2,
+                        y: (point.y + this.path[i - 1].y) / 2,
+                    }
+                    this.ctx.quadraticCurveTo(point.x, point.y, curveControl.x, curveControl.y)
                 }
             });
         }

@@ -18,6 +18,8 @@ export default class CanvasWindow {
         });
         window.addEventListener('mouseup', (event) => {
             this.stopDrawing();
+            console.log('STOP');
+
         });
         this.canvas.addEventListener('mousemove', (event) => {
             this.recordMouseMove(event);
@@ -34,6 +36,7 @@ export default class CanvasWindow {
     drawings: Drawing[] = [];
     frameRequest;
     isDrawing: boolean = false;
+    skipFrame: number = 0;
 
     initDrawing(event: MouseEvent) {
         this.isDrawing = true;
@@ -52,16 +55,19 @@ export default class CanvasWindow {
 
         //! Might need an array of isDrawing to avoid problems (or not...)
         this.frameRequest = requestAnimationFrame(() => {
-            this.drawings[this.drawings.length - 1].addCoordinate(this.getCanvasRelatedCoordinates(event));
+            if (this.skipFrame === 0) {
+                this.drawings[this.drawings.length - 1].addCoordinate(this.getCanvasRelatedCoordinates(event));
+                this.skipFrame = 0;
+            } else {
+                this.skipFrame--;
+            }
         });
 
-
-        // this.draggedCircle.editPosition(event.pageX, event.pageY);
-        // this.frameRequest = requestAnimationFrame(() => this.setCanvasAnimation());
+    
     }
 
     stopDrawing() {
-
+        this.isDrawing = false;
     }
 
     canvasWidth = () => {
