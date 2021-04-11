@@ -82,7 +82,7 @@ export default class CanvasWindow {
                 this.clearCanvas()
                 this.drawings[this.drawings.length - 1].addCoordinate(this.getCanvasRelatedCoordinates(event));
                 this.draw()
-                this.skipFrame = 10;
+                this.skipFrame = 30;
             } else {
                 this.skipFrame--;
             }
