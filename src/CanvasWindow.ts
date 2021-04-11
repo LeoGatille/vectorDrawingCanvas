@@ -16,7 +16,7 @@ export default class CanvasWindow {
         this.canvas.addEventListener('mousedown', (event) => {
             this.initDrawing(event);
         });
-        window.addEventListener('mouseup', (event) => {
+        this.canvas.addEventListener('mouseup', (event) => {
             this.stopDrawing();
             console.log('STOP');
 
@@ -29,55 +29,87 @@ export default class CanvasWindow {
             this.canvasPosTop = this.canvas.offsetTop + this.canvas.clientTop;
         })
     }
-    canvas = <HTMLCanvasElement>document.getElementById('myCanvas');
-    ctx: CanvasRenderingContext2D;
-    canvasPosLeft;
-    canvasPosTop;
-    drawings: Drawing[] = [];
-    frameRequest;
-    isDrawing: boolean = false;
-    skipFrame: number = 0;
+    private canvas = <HTMLCanvasElement>document.getElementById('myCanvas');
+    private ctx: CanvasRenderingContext2D;
+    private canvasPosLeft;
+    private canvasPosTop;
+    private drawings: Drawing[] = [];
+    private frameRequest;
+    private isDrawing: boolean = false;
+    private skipFrame: number = 0;
 
-    initDrawing(event: MouseEvent) {
+    public canceledPaths: Drawing[] = [];
+
+    public removePath() {
+        if (this.drawings.length) {
+            const canceledDrawing = this.drawings.pop();
+
+            canceledDrawing.toggleDisplay();
+            this.canceledPaths.push(canceledDrawing);
+
+            this.draw();
+
+        }
+    }
+    public reAddPath() {
+        if (this.canceledPaths.length) {
+            const pathToReAdd = this.canceledPaths.pop();
+
+            pathToReAdd.toggleDisplay();
+            this.drawings.push(pathToReAdd);
+
+            this.draw();
+        }
+    }
+
+    private initDrawing(event: MouseEvent) {
         this.isDrawing = true;
         this.drawings.push(new Drawing(new Coordinate(this.getCanvasRelatedCoordinates(event)), this.ctx,));
     }
 
-    getCanvasRelatedCoordinates(event: MouseEvent) {
+    private getCanvasRelatedCoordinates(event: MouseEvent) {
         return {
             posX: event.pageX - this.canvasPosLeft,
             posY: event.pageY - this.canvasPosTop,
         }
     }
 
-    recordMouseMove(event: MouseEvent) {
+    private recordMouseMove(event: MouseEvent) {
         if (!this.isDrawing) return
-
         //! Might need an array of isDrawing to avoid problems (or not...)
         this.frameRequest = requestAnimationFrame(() => {
             if (this.skipFrame === 0) {
+                this.clearCanvas()
                 this.drawings[this.drawings.length - 1].addCoordinate(this.getCanvasRelatedCoordinates(event));
-                this.skipFrame = 0;
+                this.draw()
+                this.skipFrame = 10;
             } else {
                 this.skipFrame--;
             }
         });
 
-    
+
     }
 
-    stopDrawing() {
+    draw() {
+        this.clearCanvas();
+        this.drawings.forEach(path => {
+            path.draw();
+        })
+    }
+
+    private stopDrawing() {
         this.isDrawing = false;
     }
 
-    canvasWidth = () => {
+    private canvasWidth = () => {
         return this.canvas.width;
     }
-    canvasHeight = () => {
+    private canvasHeight = () => {
         return this.canvas.height;
     }
 
-    clearCanvas() {
+    private clearCanvas() {
         this.ctx.clearRect(0, 0, 1024, 768);
     }
 }

@@ -9,9 +9,22 @@ export default class Drawing {
     ctx: CanvasRenderingContext2D;
     originPoint: Coordinate;
     path: Coordinate[] = [];
+    display = true;
+
+    public draw() {
+        this.initPath();
+        this.createPath();
+        this.ctx.stroke();
+    }
+
     public addCoordinate(coordinate) {
         this.path.push(new Coordinate(coordinate));
-        this.draw();
+        // this.draw();
+    }
+
+    public toggleDisplay() {
+        this.display = !this.display;
+        // this.draw();
     }
 
     private initPath() {
@@ -22,9 +35,23 @@ export default class Drawing {
     }
 
     private createPath() {
+        if (!this.display) return;
+
         if (this.path.length) {
             this.path.forEach((point, i) => {
                 if (i % 2) {
+
+
+
+                    this.ctx.bezierCurveTo(
+                        i > 0 ? this.path[i - 1].x : this.originPoint.x,
+                        i > 0 ? this.path[i - 1].y : this.originPoint.y,
+                        point.x,
+                        point.y,
+                        point.x,
+                        point.y
+                    );
+
 
 
                     // this.ctx.bezierCurveTo(
@@ -35,18 +62,14 @@ export default class Drawing {
                     //      point.x,
                     //      point.y
                     // );
-                    const curveControl = {
-                        x: (point.x + this.path[i - 1].x) / 2,
-                        y: (point.y + this.path[i - 1].y) / 2,
-                    }
-                    this.ctx.quadraticCurveTo(point.x, point.y, curveControl.x, curveControl.y)
+                    // const curveControl = {
+                    //     x: (point.x + this.path[i - 1].x) / 2,
+                    //     y: (point.y + this.path[i - 1].y) / 2,
+                    // }
+                    // this.ctx.quadraticCurveTo(point.x, point.y, curveControl.x, curveControl.y)
                 }
             });
         }
     }
-    public draw() {
-        this.initPath();
-        this.createPath();
-        this.ctx.stroke();
-    }
+
 }

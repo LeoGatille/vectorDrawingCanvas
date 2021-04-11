@@ -8,8 +8,17 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
-    <canvas id="myCanvas"></canvas>
+<body style="display: flex; flex-direction: column;">
+    <div style="margin-bottom: 10px;">
+        <button id="undo" style="margin-left: 10px;">
+            <- </button>
+                <button id="redo">
+                    ->
+                </button>
+    </div>
+    <div>
+        <canvas id="myCanvas"></canvas>
+    </div>
     <script src="bundle/main.js"></script>
     <!-- <script type="module" src="dist/Drawing.js"></script>
     <script type="module" src="dist/Coordinate.js"></script> -->
