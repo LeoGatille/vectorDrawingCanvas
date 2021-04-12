@@ -5,4 +5,12 @@ export default class Coordinate {
     }
     x: number;
     y: number;
+
+    public setX(val: number) {
+        this.x = val;
+    }
+
+    public setY(val: number) {
+        this.y = val;
+    }
 }

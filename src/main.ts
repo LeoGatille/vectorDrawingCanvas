@@ -10,11 +10,9 @@ document.querySelector('#redo').addEventListener('click', () => redo())
 
 
 function undo() {
-    console.log('undo');
 
     canvas.removePath();
 }
 function redo() {
-    console.log('redo');
     canvas.reAddPath();
 }
