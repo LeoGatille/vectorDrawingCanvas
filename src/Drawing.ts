@@ -21,27 +21,28 @@ export default class Drawing {
 
         this.ctx.stroke();
 
-        // this.path.forEach((point, i) => {
+        this.uglyPath.forEach((point, i) => {
 
-        //     // this.ctx.beginPath();
-        //     // this.ctx.arc(point.x, point.y, 3, 0, 2 * Math.PI);
-        //     // this.ctx.fillStyle = 'red';
-        //     // this.ctx.fill();
+            // this.ctx.beginPath();
+            // this.ctx.arc(point.x, point.y, 1, 0, 2 * Math.PI);
+            // this.ctx.fillStyle = 'red';
+            // this.ctx.fill();
 
 
-        //     // if (i % 2) {
-        //     //     this.ctx.beginPath();
-        //     //     this.ctx.arc((point.x + this.path[i - 1].x) / 2, (point.y + this.path[i - 1].y) / 2, 3, 0, 2 * Math.PI);
-        //     //     this.ctx.fillStyle = 'green';
-        //     //     this.ctx.fill();
-        //     // } else {
-        //     //     this.ctx.beginPath();
-        //     //     this.ctx.arc(point.x, point.y, 3, 0, 2 * Math.PI);
-        //     //     this.ctx.fillStyle = 'red';
-        //     //     this.ctx.fill();
-        //     // }
-        // })
+            //     // if (i % 2) {
+            //     //     this.ctx.beginPath();
+            //     //     this.ctx.arc((point.x + this.path[i - 1].x) / 2, (point.y + this.path[i - 1].y) / 2, 3, 0, 2 * Math.PI);
+            //     //     this.ctx.fillStyle = 'green';
+            //     //     this.ctx.fill();
+            //     // } else {
+            //     //     this.ctx.beginPath();
+            //     //     this.ctx.arc(point.x, point.y, 3, 0, 2 * Math.PI);
+            //     //     this.ctx.fillStyle = 'red';
+            //     //     this.ctx.fill();
+            //     // }
+        })
     }
+
 
     public drawUgly() {
         this.initPath();
@@ -106,20 +107,22 @@ export default class Drawing {
                 this.ctx.quadraticCurveTo(p0.x, p0.y, midx, midy);
                 // }
             };
-            // this.ctx.moveTo(this.uglyPath[0].x, this.uglyPath[0].y);
-            // this.uglyPath.forEach((point, i) => {
-            //     if (i < this.uglyPath.length - 1) {
-            //         this.ctx.quadraticCurveTo(point.x, point.y, this.path[i + 1].x, this.path[i + 1].y);
-            //     }
-            // })
+            const p0 = this.path[this.path.length - 2],
+                p1 = this.path[this.path.length - 1];
 
+            this.ctx.quadraticCurveTo(p0.x, p0.y, p1.x, p1.y);
+        }
+        if (this.uglyPath.length > 2) {
+            this.ctx.moveTo(this.path[this.path.length - 1].x, this.path[this.path.length - 1].y);
+            this.uglyPath.forEach((point, i) => {
+                if (i < this.uglyPath.length - 1) {
+                    this.ctx.quadraticCurveTo(point.x, point.y, this.uglyPath[i + 1].x, this.uglyPath[i + 1].y);
+                }
+            })
         }
 
 
-        const p0 = this.path[this.path.length - 2],
-            p1 = this.path[this.path.length - 1];
 
-        this.ctx.quadraticCurveTo(p0.x, p0.y, p1.x, p1.y);
     }
 
 

@@ -17,7 +17,7 @@ export default class CanvasWindow {
             this.initDrawing(event);
         });
         this.canvas.addEventListener('mouseup', (event) => {
-            this.stopDrawing();
+            this.stopDrawing(event);
         });
         this.canvas.addEventListener('mousemove', (event) => {
             this.recordMouseMove(event);
@@ -82,7 +82,7 @@ export default class CanvasWindow {
 
                 currentDrawing.addCoordinate(this.getCanvasRelatedCoordinates(event));
                 currentDrawing.removeUglyPath();
-                this.skipFrame = 60;
+                this.skipFrame = 30;
             } else {
                 currentDrawing.addUglyCoordinate(this.getCanvasRelatedCoordinates(event));
                 this.skipFrame--;
@@ -113,8 +113,21 @@ export default class CanvasWindow {
         });
     }
 
-    private stopDrawing() {
+    private stopDrawing(event: MouseEvent) {
+        // if (this.skipFrame !== 0) {
+
+        const currentPath = this.drawings[this.drawings.length - 1];
+        console.log('1 => ', currentPath);
+        currentPath.removeUglyPath();
+        currentPath.addCoordinate({
+            posX: event.pageX - this.canvasPosLeft,
+            posY: event.pageY - this.canvasPosTop,
+        });
+        console.log('1 => ', currentPath);
+        this.draw();
+        // }
         this.isDrawing = false;
+
     }
 
     private canvasWidth = () => {
