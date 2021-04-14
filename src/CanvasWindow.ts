@@ -36,6 +36,7 @@ export default class CanvasWindow {
     private isDrawing: boolean = false;
     private skipFrame: number = 0;
 
+    public smoothing: number = 10;
     public lastFrameTimestamp: 0;
     public canceledPaths: Drawing[] = [];
 
@@ -48,6 +49,13 @@ export default class CanvasWindow {
             this.draw();
 
         }
+    }
+    public setFrameToSkip(val) {
+        if (((this.smoothing + val) > 0) && ((this.smoothing + val) < 70)) {
+            this.smoothing += val;
+        }
+        console.log(this.smoothing);
+
     }
     public reAddPath() {
         if (this.canceledPaths.length) {
@@ -82,7 +90,7 @@ export default class CanvasWindow {
 
                 currentDrawing.addCoordinate(this.getCanvasRelatedCoordinates(event));
                 currentDrawing.removeUglyPath();
-                this.skipFrame = 30;
+                this.skipFrame = this.smoothing;
             } else {
                 currentDrawing.addUglyCoordinate(this.getCanvasRelatedCoordinates(event));
                 this.skipFrame--;
