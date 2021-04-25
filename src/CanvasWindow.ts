@@ -38,9 +38,11 @@ export default class CanvasWindow {
     private drawings: Drawing[] = [];
     private frameRequest;
     private isDrawing: boolean = false;
-    private skipFrame: number = 10;
+    private skipFrame: number = 0;
+    private singleDotList: Coordinate[] = [];
 
-    public smoothing: number = 10;
+    public color: string = 'black';
+    public smoothing: number = 50;
     public lastFrameTimestamp: 0;
     public canceledPaths: Drawing[] = [];
 
@@ -104,6 +106,12 @@ export default class CanvasWindow {
         this.clearCanvas();
         this.drawings.forEach(path => {
             path.draw();
+        });
+        this.singleDotList.forEach(coordinate => {
+            this.ctx.beginPath();
+            this.ctx.arc(coordinate.x, coordinate.y, 3, 0, 2 * Math.PI);
+            this.ctx.fillStyle = this.color;
+            this.ctx.fill();
         })
     }
     fps: number = 0;
@@ -124,12 +132,14 @@ export default class CanvasWindow {
         const currentPath = this.drawings[this.drawings.length - 1];
 
         if (currentPath.path.length === 1) {
-            this.ctx.beginPath();
-            this.ctx.arc(currentPath.path[0].x, currentPath.path[0].y, 3, 0, 2 * Math.PI);
-            this.ctx.fillStyle = 'blue';
-            this.ctx.fill();
+            this.singleDotList.push(new Coordinate({ posX: currentPath.path[0].x, posY: currentPath.path[0].y }))
 
-            currentPath.addCircle();
+            // this.ctx.beginPath();
+            // this.ctx.arc(currentPath.path[0].x, currentPath.path[0].y, 3, 0, 2 * Math.PI);
+            // this.ctx.fillStyle = 'blue';
+            // this.ctx.fill();
+
+            // currentPath.addCircle();
         }
 
         if (currentPath.path.length > 2) {

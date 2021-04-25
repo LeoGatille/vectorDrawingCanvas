@@ -72,6 +72,7 @@ export default class Drawing {
         // this.draw();
     }
 
+
     public addCircle() {
         this.ctx.beginPath();
         this.ctx.arc(this.path[0].x, this.path[0].y, 12, 0, 2 * Math.PI);
