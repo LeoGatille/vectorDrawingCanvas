@@ -1,4 +1,3 @@
-import { FrameRate } from './FrameRate';
 import Coordinate from './Coordinate';
 import Drawing from './Drawing';
 
@@ -7,8 +6,8 @@ export default class CanvasWindow {
         this.ctx = this.canvas.getContext('2d');
         // this.drawings = new Drawing(this.ctx);
 
-        this.canvas.width = width;
-        this.canvas.height = height;
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
 
         this.canvasPosLeft = this.canvas.offsetLeft + this.canvas.clientLeft;
         this.canvasPosTop = this.canvas.offsetTop + this.canvas.clientTop;
@@ -16,16 +15,21 @@ export default class CanvasWindow {
         this.canvas.addEventListener('mousedown', (event) => {
             this.initDrawing(event);
         });
-        this.canvas.addEventListener('mouseup', (event) => {
+        window.addEventListener('mouseup', (event) => {
             this.stopDrawing(event);
         });
         this.canvas.addEventListener('mousemove', (event) => {
             this.recordMouseMove(event);
-        })
-        window.addEventListener('resize', () => {
+        });
+        window.addEventListener('resize', (event) => {
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight;
+            console.log('posLeft => ', this.canvasPosLeft)
+            console.log('posRight => ', this.canvasPosLeft)
             this.canvasPosLeft = this.canvas.offsetLeft + this.canvas.clientLeft;
             this.canvasPosTop = this.canvas.offsetTop + this.canvas.clientTop;
-        })
+            this.draw();
+        });
     }
     private canvas = <HTMLCanvasElement>document.getElementById('myCanvas');
     private ctx: CanvasRenderingContext2D;
@@ -34,7 +38,7 @@ export default class CanvasWindow {
     private drawings: Drawing[] = [];
     private frameRequest;
     private isDrawing: boolean = false;
-    private skipFrame: number = 0;
+    private skipFrame: number = 10;
 
     public smoothing: number = 10;
     public lastFrameTimestamp: 0;
@@ -47,15 +51,12 @@ export default class CanvasWindow {
             this.canceledPaths.push(canceledDrawing);
 
             this.draw();
-
         }
     }
     public setFrameToSkip(val) {
         if (((this.smoothing + val) > 0) && ((this.smoothing + val) < 70)) {
             this.smoothing += val;
         }
-        console.log(this.smoothing);
-
     }
     public reAddPath() {
         if (this.canceledPaths.length) {
@@ -115,27 +116,34 @@ export default class CanvasWindow {
             }
             this.times.push(now);
             this.fps = this.times.length;
-            console.log(this.fps);
-
             this.refreshLoop();
         });
     }
 
     private stopDrawing(event: MouseEvent) {
-        // if (this.skipFrame !== 0) {
-
         const currentPath = this.drawings[this.drawings.length - 1];
-        console.log('1 => ', currentPath);
-        currentPath.removeUglyPath();
-        currentPath.addCoordinate({
-            posX: event.pageX - this.canvasPosLeft,
-            posY: event.pageY - this.canvasPosTop,
-        });
-        console.log('1 => ', currentPath);
-        this.draw();
-        // }
-        this.isDrawing = false;
 
+        if (currentPath.path.length === 1) {
+            this.ctx.beginPath();
+            this.ctx.arc(currentPath.path[0].x, currentPath.path[0].y, 3, 0, 2 * Math.PI);
+            this.ctx.fillStyle = 'blue';
+            this.ctx.fill();
+
+            currentPath.addCircle();
+        }
+
+        if (currentPath.path.length > 2) {
+            console.log('WTF');
+
+            currentPath.addCoordinate({
+                posX: event.pageX - this.canvasPosLeft,
+                posY: event.pageY - this.canvasPosTop,
+            });
+            currentPath.removeUglyPath();
+        }
+
+        this.draw();
+        this.isDrawing = false;
     }
 
     private canvasWidth = () => {
@@ -146,6 +154,6 @@ export default class CanvasWindow {
     }
 
     private clearCanvas() {
-        this.ctx.clearRect(0, 0, 1024, 768);
+        this.ctx.clearRect(0, 0, this.canvasWidth(), this.canvasHeight());
     }
 }

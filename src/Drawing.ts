@@ -7,6 +7,7 @@ export default class Drawing {
 
 
         this.addCoordinate({ posX: originPoint.x, posY: originPoint.y });
+        this.addUglyCoordinate({ posX: originPoint.x, posY: originPoint.y });
     }
     color: string;
     ctx: CanvasRenderingContext2D;
@@ -66,8 +67,16 @@ export default class Drawing {
     }
 
     public addCoordinate(coordinate) {
+        console.log('addCoordinate')
         this.path.push(new Coordinate(coordinate));
         // this.draw();
+    }
+
+    public addCircle() {
+        this.ctx.beginPath();
+        this.ctx.arc(this.path[0].x, this.path[0].y, 12, 0, 2 * Math.PI);
+        this.ctx.fillStyle = 'blue';
+        this.ctx.fill();
     }
 
     public addUglyCoordinate(coordinate) {
