@@ -5,11 +5,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plugin MAX</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/all.css">
 </head>
 
 <body style="display: flex; flex-direction: column;">
-    <div id="settings"
+    <div id="settings">
+        <div class="main-settings">
+            <div id="main-color-container" class="settings-container">
+
+            </div>
+            <div class="settings-container">
+                <div id="undo" class="action custom-button disabled">
+                    <i class="fas fa-undo"></i>
+                </div>
+                <div id="redo" class="action custom-button disabled">
+                    <i class="fas fa-redo"></i>
+                </div>
+                <div class="action custom-button enabled">
+                    <i class="fas fa-expand-arrows-alt"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- <div id="settings"
         style="position: absolute; top:0; right: 0; width: 100px; height: 100px; background-color: rgba(0, 255, 255, 0.2);">
         <div>
             <p>
@@ -18,15 +39,17 @@
             <button id="addFrameToSkip">+</button>
             <span id="frameToSkipVal"></span>
             <button id="removeFrameToSkip">-</button>
+            <input id="smoothingRange" type="range" value="60" min="0" max="100" step="10">
         </div>
         <div style="margin-bottom: 10px;">
             <button id="undo" style="margin-left: 10px;">
-                <- </button>
-                    <button id="redo">
-                        ->
-                    </button>
+                <i class="fas fa-undo"></i>
+            </button>
+            <button id="redo">
+                <i class="fas fa-redo"></i>
+            </button>
         </div>
-    </div>
+    </div> -->
     <canvas id="myCanvas"></canvas>
     <div>
     </div>

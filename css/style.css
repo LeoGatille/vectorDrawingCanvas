@@ -1,0 +1,64 @@
+html {
+  height: 100%;
+}
+body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#settings {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+.action.enabled {
+  cursor: pointer;
+}
+.main-settings {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  background-color: rgb(63, 79, 87);
+  border-radius: 5px;
+}
+.settings-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+}
+.custom-button:last-child {
+  transform: scale(1.2);
+  margin-right: 0;
+  margin-left: 10px;
+}
+.custom-button {
+  transition: all 0.2s ease-in-out;
+  margin: 0 5px 0 5px;
+  padding: 2px;
+  border-radius: 2px;
+}
+.custom-button.disabled {
+  color: rgb(80, 106, 117);
+}
+.custom-button.enabled:hover {
+  color: rgb(63, 79, 87);
+  background-color: white;
+}
+.custom-button.enabled {
+  color: white;
+}
+.color.disabled {
+  background-color: rgb(80, 106, 117);
+}
+.color.selected {
+  background-color: white;
+}
+
+/* #myCanvas {
+  border: solid grey;
+  width: 100%;
+  height: 100%;
+} */

@@ -45,14 +45,16 @@ export default class CanvasWindow {
     private isLocked: boolean = false;
 
     public color: string = 'black';
-    public smoothing: number = 50;
+    public smoothing: number = 60;
     public lastFrameTimestamp: 0;
     public canceledPaths: Drawing[] = [];
 
+    public setSmoothing(value: number) {
+        this.smoothing = value;
+    }
     public toggleLockCanvas() {
         this.isLocked = !this.isLocked;
     }
-
     public removePath() {
         if (this.drawings.length) {
             const canceledDrawing = this.drawings.pop();
