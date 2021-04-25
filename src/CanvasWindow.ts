@@ -2,7 +2,7 @@ import Coordinate from './Coordinate';
 import Drawing from './Drawing';
 
 export default class CanvasWindow {
-    constructor(width: number, height: number) {
+    constructor() {
         this.ctx = this.canvas.getContext('2d');
         // this.drawings = new Drawing(this.ctx);
 
@@ -16,7 +16,9 @@ export default class CanvasWindow {
             this.initDrawing(event);
         });
         window.addEventListener('mouseup', (event) => {
-            this.stopDrawing(event);
+            if (!this.isLocked) {
+                this.stopDrawing(event);
+            }
         });
         this.canvas.addEventListener('mousemove', (event) => {
             this.recordMouseMove(event);
@@ -24,10 +26,10 @@ export default class CanvasWindow {
         window.addEventListener('resize', (event) => {
             this.canvas.width = window.innerWidth;
             this.canvas.height = window.innerHeight;
-            console.log('posLeft => ', this.canvasPosLeft)
-            console.log('posRight => ', this.canvasPosLeft)
+
             this.canvasPosLeft = this.canvas.offsetLeft + this.canvas.clientLeft;
             this.canvasPosTop = this.canvas.offsetTop + this.canvas.clientTop;
+
             this.draw();
         });
     }
@@ -40,11 +42,16 @@ export default class CanvasWindow {
     private isDrawing: boolean = false;
     private skipFrame: number = 0;
     private singleDotList: Coordinate[] = [];
+    private isLocked: boolean = false;
 
     public color: string = 'black';
     public smoothing: number = 50;
     public lastFrameTimestamp: 0;
     public canceledPaths: Drawing[] = [];
+
+    public toggleLockCanvas() {
+        this.isLocked = !this.isLocked;
+    }
 
     public removePath() {
         if (this.drawings.length) {
@@ -85,7 +92,6 @@ export default class CanvasWindow {
 
     private recordMouseMove(event: MouseEvent) {
         if (!this.isDrawing) return
-        //! Might need an array of isDrawing to avoid problems (or not...)
         this.frameRequest = requestAnimationFrame(() => {
             const currentDrawing = this.drawings[this.drawings.length - 1]
             if (this.skipFrame === 0) {
@@ -114,37 +120,20 @@ export default class CanvasWindow {
             this.ctx.fill();
         })
     }
-    fps: number = 0;
-    times = [];
-    private refreshLoop() {
-        window.requestAnimationFrame(() => {
-            const now = performance.now();
-            while (this.times.length > 0 && this.times[0] <= now - 1000) {
-                this.times.shift();
-            }
-            this.times.push(now);
-            this.fps = this.times.length;
-            this.refreshLoop();
-        });
+
+    public stopDrawing(event: MouseEvent = null) {
+        if (event) {
+            this.finishDrawing(event);
+        }
+        this.isDrawing = false;
     }
 
-    private stopDrawing(event: MouseEvent) {
+    private finishDrawing(event: MouseEvent) {
         const currentPath = this.drawings[this.drawings.length - 1];
 
         if (currentPath.path.length === 1) {
             this.singleDotList.push(new Coordinate({ posX: currentPath.path[0].x, posY: currentPath.path[0].y }))
-
-            // this.ctx.beginPath();
-            // this.ctx.arc(currentPath.path[0].x, currentPath.path[0].y, 3, 0, 2 * Math.PI);
-            // this.ctx.fillStyle = 'blue';
-            // this.ctx.fill();
-
-            // currentPath.addCircle();
-        }
-
-        if (currentPath.path.length > 2) {
-            console.log('WTF');
-
+        } else if (currentPath.path.length > 2) {
             currentPath.addCoordinate({
                 posX: event.pageX - this.canvasPosLeft,
                 posY: event.pageY - this.canvasPosTop,
@@ -153,7 +142,6 @@ export default class CanvasWindow {
         }
 
         this.draw();
-        this.isDrawing = false;
     }
 
     private canvasWidth = () => {

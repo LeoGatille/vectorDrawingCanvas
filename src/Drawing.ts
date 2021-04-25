@@ -67,9 +67,9 @@ export default class Drawing {
     }
 
     public addCoordinate(coordinate) {
-        console.log('addCoordinate')
+        console.log('ADD COORDINATE');
+
         this.path.push(new Coordinate(coordinate));
-        // this.draw();
     }
 
 
@@ -130,102 +130,6 @@ export default class Drawing {
                 }
             })
         }
-
-
-
     }
 
-
-
-
-
-    // private getControlPoint(vector, orthogonalOrigin: Coordinate, tangentOrigin: Coordinate,) {
-
-    //     let length = 0;
-
-    //     const vectorCopy = JSON.parse(JSON.stringify(vector))
-
-    //     const orthogonal = {
-    //         coordinate: JSON.parse(JSON.stringify(orthogonalOrigin)),
-    //         vector: { posX: vectorCopy.y, posY: vectorCopy.x * -1 },
-    //         // angle: this.getVectorAngle(vectorCopy),
-
-    //     };
-    //     const tangent = {
-    //         coordinate: JSON.parse(JSON.stringify(tangentOrigin)),
-    //         vector: { x: vectorCopy.x, y: vectorCopy.y },
-    //         // angle: this.getVectorAngle(vectorCopy),
-    //     }
-    //     do {
-    //         length++;
-
-    //         orthogonal.coordinate.x += vector.sin() * -1;
-    //         orthogonal.coordinate.y += vector.cos();
-
-    //         tangent.coordinate.x += vector.cos();
-    //         tangent.coordinate.y += vector.sin();
-
-    //         // this.ctx.beginPath();
-
-    //         this.ctx.beginPath();
-    //         this.ctx.arc(tangentOrigin.x, tangentOrigin.y / 50, 3, 0, 2 * Math.PI);
-    //         this.ctx.fillStyle = 'blue';
-    //         this.ctx.fill();
-
-
-    //         // this.ctx.beginPath();
-    //         this.ctx.beginPath();
-    //         this.ctx.arc(orthogonalOrigin.x, orthogonalOrigin.y / 2, 3, 0, 2 * Math.PI);
-    //         this.ctx.fillStyle = 'pink';
-    //         this.ctx.fill();
-
-
-    //         /*
-    //        orthogonal.coordinate.x += Math.cos(Math.atan2(orthogonal.vector.posY, orthogonal.vector.posX));
-    //         orthogonal.coordinate.y += Math.sin(Math.atan2(orthogonal.vector.posY, orthogonal.vector.posX));
-
-    //         tangent.coordinate.x += Math.cos(Math.atan2(vector.y, vector.x));
-    //         tangent.coordinate.y += Math.sin(Math.atan2(vector.y, vector.x));
-
-    //         */
-    //         if (length === 1000) {
-    //             console.log('Length === 1000');
-
-    //             break;
-    //         }
-    //     } while (
-    //         orthogonal.coordinate.x - tangent.coordinate.x > 50
-    //         || orthogonal.coordinate.x - tangent.coordinate.x < -50
-    //     );
-
-    //     this.ctx.beginPath();
-    //     this.ctx.arc(tangentOrigin.x, tangentOrigin.y / 50, 3, 0, 2 * Math.PI);
-    //     this.ctx.fillStyle = 'blue';
-    //     this.ctx.fill();
-
-
-    //     // this.ctx.beginPath();
-    //     this.ctx.beginPath();
-    //     this.ctx.arc(orthogonalOrigin.x, orthogonalOrigin.y / 2, 3, 0, 2 * Math.PI);
-    //     this.ctx.fillStyle = 'pink';
-    //     this.ctx.fill();
-
-    //     return tangent.coordinate;
-    // }
-
-    // setAngle() {
-    //     const angle = 90 * Math.PI / 180;
-
-    // }
-
-    // setVecorAngle() {
-    //     const angle = 90;
-
-    // }
-
-    // getVectorAngle(vector: Coordinate): number {
-    //     const angle = Math.atan2(vector.y, vector.x);
-    //     const degrees = 180 * angle / Math.PI;
-    //     return (360 + Math.round(degrees)) % 360;
-    // }
 }
