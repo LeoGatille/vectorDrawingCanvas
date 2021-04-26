@@ -1,9 +1,8 @@
-import { color } from './main';
 import CanvasWindow from "./CanvasWindow";
 console.log('------COMPILED------', new Date().getMinutes() + ' : ' + new Date().getSeconds());
 
-const colorList = {
-    main : ['black', 'white', 'blue', 'red', 'green', 'yellow', 'orange'],
+const allColorList = {
+    main: ['black', 'white', 'blue', 'red', 'green', 'yellow', 'orange'],
     custom: [],
     history: [],
     secondary: ['pink', 'purple'],
@@ -36,14 +35,28 @@ function redo() {
 }
 
 function displayColorsOptions(colorListName: string) {
-    const colorList: string[] = ;
+    const colorList: string[] = allColorList[colorListName];
     const target: HTMLElement = document.querySelector('#' + colorListName + '-color-container');
 
-}
+    colorList.forEach(color => {
+        const DOMItem = document.createElement('div');
+        DOMItem.className = "color";
+        DOMItem.dataset.color = color;
+        DOMItem.style.backgroundColor = color;
+        // DOMItem.onclick = (ev: MouseEvent)  =>  setSelectedColor( ev.target.);
 
+        target.appendChild(DOMItem);
+    });
+}
+function setSelectedColor(toto) {
+    console.log('TOTO')
+}
+//! FUCK => Le smoothing doit être calculé à partir des points et pas des frame
+//! sinon ça fait que si tu dessine trop vite ça tej la moité de ton dessin :D
 export type Color = {
     name: string,
     rgba: string,
     unset: boolean,
 }
+displayColorsOptions('main');
 

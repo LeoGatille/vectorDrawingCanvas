@@ -45,7 +45,7 @@ export default class CanvasWindow {
     private isLocked: boolean = false;
 
     public color: string = 'black';
-    public smoothing: number = 60;
+    public smoothing: number = 15;
     public lastFrameTimestamp: 0;
     public canceledPaths: Drawing[] = [];
 
