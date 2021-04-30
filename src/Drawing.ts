@@ -19,7 +19,7 @@ export default class Drawing {
     public draw() {
         this.initPath();
         this.createPath();
-
+        this.ctx.strokeStyle = this.color;
         this.ctx.stroke();
 
         this.uglyPath.forEach((point, i) => {
@@ -67,8 +67,6 @@ export default class Drawing {
     }
 
     public addCoordinate(coordinate) {
-        console.log('ADD COORDINATE');
-
         this.path.push(new Coordinate(coordinate));
     }
 
