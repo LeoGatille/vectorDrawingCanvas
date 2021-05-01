@@ -3,6 +3,7 @@ export class Menu {
     constructor() {
         this.setEventListeners();
         this.displayColorsOptions('main');
+        this.setSelectedColor();
     }
     allColorList = {
         main: ['black', 'white', 'blue', 'red', 'green', 'yellow', 'orange'],
@@ -10,7 +11,7 @@ export class Menu {
         history: [],
         secondary: ['pink', 'purple'],
     }
-    selectedColor: string = 'black';
+    selectedColor: string;
 
     private undo() {
         this.emit('undo');
@@ -52,7 +53,7 @@ export class Menu {
         });
     }
 
-    private setSelectedColor(color: string) {
+    private setSelectedColor(color: string = 'black') {
         if (this.selectedColor !== color) {
             this.selectedColor = color;
             this.emit('colorChange', this.selectedColor);

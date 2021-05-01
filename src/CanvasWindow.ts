@@ -45,7 +45,7 @@ export default class CanvasWindow {
     private isLocked: boolean = false;
 
     public color: string = 'black';
-    public smoothing: number = 10;
+    public smoothing: number = 5;
     public lastFrameTimestamp: 0;
     public canceledPaths: Drawing[] = [];
 
@@ -97,43 +97,43 @@ export default class CanvasWindow {
         }
     }
 
-    private recordMouseMove(event: MouseEvent) {
-        if (!this.isDrawing) return
-
-        const currentDrawing = this.drawings[this.drawings.length - 1]
-        if (this.skipFrame === 0) {
-            // this.clearCanvas()
-
-            currentDrawing.addCoordinate(this.getCanvasRelatedCoordinates(event));
-            currentDrawing.removeUglyPath();
-            this.skipFrame = this.smoothing;
-        } else {
-            currentDrawing.addUglyCoordinate(this.getCanvasRelatedCoordinates(event));
-            this.skipFrame--;
-        }
-        // this.frameRequest = requestAnimationFrame(() => {
-
-        this.draw();
-        // });
-    }
-
     // private recordMouseMove(event: MouseEvent) {
     //     if (!this.isDrawing) return
-    //     this.frameRequest = requestAnimationFrame(() => {
-    //         const currentDrawing = this.drawings[this.drawings.length - 1]
-    //         if (this.skipFrame === 0) {
-    //             // this.clearCanvas()
 
-    //             currentDrawing.addCoordinate(this.getCanvasRelatedCoordinates(event));
-    //             currentDrawing.removeUglyPath();
-    //             this.skipFrame = this.smoothing;
-    //         } else {
-    //             currentDrawing.addUglyCoordinate(this.getCanvasRelatedCoordinates(event));
-    //             this.skipFrame--;
-    //         }
-    //         this.draw();
-    //     });
+    //     const currentDrawing = this.drawings[this.drawings.length - 1]
+    //     if (this.skipFrame === 0) {
+    //         // this.clearCanvas()
+
+    //         currentDrawing.addCoordinate(this.getCanvasRelatedCoordinates(event));
+    //         currentDrawing.removeUglyPath();
+    //         this.skipFrame = this.smoothing;
+    //     } else {
+    //         currentDrawing.addUglyCoordinate(this.getCanvasRelatedCoordinates(event));
+    //         this.skipFrame--;
+    //     }
+    //     // this.frameRequest = requestAnimationFrame(() => {
+
+    //     this.draw();
+    //     // });
     // }
+
+    private recordMouseMove(event: MouseEvent) {
+        if (!this.isDrawing) return
+        this.frameRequest = requestAnimationFrame(() => {
+            const currentDrawing = this.drawings[this.drawings.length - 1]
+            if (this.skipFrame === 0) {
+                // this.clearCanvas()
+
+                currentDrawing.addCoordinate(this.getCanvasRelatedCoordinates(event));
+                currentDrawing.removeUglyPath();
+                this.skipFrame = this.smoothing;
+            } else {
+                currentDrawing.addUglyCoordinate(this.getCanvasRelatedCoordinates(event));
+                this.skipFrame--;
+            }
+            this.draw();
+        });
+    }
 
     draw() {
         this.clearCanvas();
