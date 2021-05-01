@@ -1,10 +1,13 @@
+import { ExpansionBtn } from './ExpansionBtn';
 import { Color } from './Types/Color';
 export class Menu {
     constructor() {
         this.setEventListeners();
         this.displayColorsOptions('main');
         this.setSelectedColor();
+        this.expansionBtn = new ExpansionBtn(document.querySelector('#menu-expansion-controller'));
     }
+    expansionBtn: ExpansionBtn;
     allColorList = {
         main: ['black', 'white', 'blue', 'red', 'green', 'yellow', 'orange'],
         custom: [],
