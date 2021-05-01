@@ -11,8 +11,7 @@ function init() {
         history: [],
         secondary: ['pink', 'purple'],
     }
-    //! FUCK => Le smoothing doit être calculé à partir des points et pas des frame (les points ne marche pas non plus...)
-    //! sinon ça fait que si tu dessine trop vite ça tej la moité de ton dessin :D
+
     const canvas = new CanvasWindow();
     const menu = new Menu();
 
@@ -25,6 +24,9 @@ function init() {
     //! Has a any type !
     window.addEventListener('smoothingChange', (smoothingValue: any) => canvas.setSmoothing(smoothingValue));
     window.addEventListener('colorChange', (e: any) => canvas.setColor(e.detail));
+    
+    //! Has a any type !
+    window.addEventListener('expand', (e: any) => menu.setExpansion(e.detail))
 
 }
 

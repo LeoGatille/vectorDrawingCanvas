@@ -1,19 +1,26 @@
+import { Utils } from "./Utils";
+
 export class ExpansionBtn {
-    constructor(target: HTMLElement, expanded: boolean = false) {
+    constructor(target: HTMLElement, customEventName: string = 'expand', expanded: boolean = false) {
         this.targetContainer = target;
+        this.customEvent = customEventName;
+        this.expanded = expanded;
         this.init();
 
-        this.expanded = expanded;
+        target.addEventListener('click', () => this.toggleExpansion());
     }
     private target: HTMLElement;
     private targetContainer: HTMLElement;
+    private customEvent: string;
     private expanded: boolean;
     private expandClass: string = 'fa-angle-up';
     private reducedClass: string = 'fa-angle-down';
 
     public toggleExpansion() {
         this.expanded = !this.expanded;
-        this.removeTargetClass()
+        Utils.emit(this.customEvent, this.expanded);
+        //! instead of remove should handle a transiton on rotation 180°
+        this.removeTargetClass();
         this.addTargetClass();
     }
     private removeTargetClass() {
