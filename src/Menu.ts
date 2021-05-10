@@ -8,6 +8,7 @@ export class Menu {
         this.setEventListeners();
         this.displayColorsOptions('main');
         this.displayColorsOptions('secondary');
+        this.displayColorsOptions('history');
         this.setSelectedColor();
         this.expansionBtn = new ExpansionBtn(document.querySelector('#menu-expansion-controller'));
     }
@@ -17,7 +18,7 @@ export class Menu {
     allColorList = {
         main: ['black', 'white', 'blue', 'red', 'green', 'yellow', 'orange'],
         custom: [],
-        history: [],
+        history: ['grey', 'grey', 'grey', 'grey', 'grey'],
         secondary: [],
     }
     selectedColor: string;
@@ -57,7 +58,7 @@ export class Menu {
 
         colorList.forEach(color => {
             const DOMItem = document.createElement('div');
-            DOMItem.className = "color" + (colorListName !== 'main' ? ' secondary-color' : '');
+            DOMItem.className = "color" + (colorListName === 'secondary' ? ' secondary-color' : '');
             DOMItem.id = color;
             DOMItem.dataset.color = color;
             DOMItem.style.backgroundColor = color;

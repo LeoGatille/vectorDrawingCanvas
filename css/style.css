@@ -23,7 +23,6 @@ button {
 label {
   font-size: 0.8rem;
   color: rgba(255, 255, 255, 0.616);
-  padding: 5px;
   margin-bottom: 10px;
 }
 
@@ -42,12 +41,17 @@ label {
 #additional-content {
   transition: height ease-in-out 0.2s;
   height: 0px;
-  overflow: hidden;
+  width: 50%;
+  overflow-y: scroll;
+  overflow-x: hidden;
   background: rgb(63, 79, 87);
+  padding: 0 5px;
 }
 #additional-content.expanded {
   height: 200px;
-
+}
+.additional-section {
+  margin-bottom: 5px;
 }
 
 .action.enabled {
@@ -96,6 +100,9 @@ label {
   border-radius: 50%;
   border: solid rgb(25, 30, 32);
   border-width: 1px;
+}
+.color.disabled {
+  color: ;
 }
 .color:not(.selected):hover {
   transform: scale(1.3);
@@ -153,11 +160,16 @@ label {
   height: 5px;
 }
 
+#history-color-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 #secondary-color-container {
   height: 100%;
-  width: 50%;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  /* overflow-y: scroll;
+  overflow-x: hidden; */
   display: flex;
   flex-wrap: wrap;
 }
@@ -169,8 +181,8 @@ label {
 
 #colorpicker {
   border-width: 0;
-  width: 100%;
-  height: 5px;
+  width: 92%;
+  height: 20px;
   border-radius: 2px;
   padding: 0 0px;
 }
