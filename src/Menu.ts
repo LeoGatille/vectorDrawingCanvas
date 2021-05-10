@@ -18,7 +18,7 @@ export class Menu {
     allColorList = {
         main: ['black', 'white', 'blue', 'red', 'green', 'yellow', 'orange'],
         custom: [],
-        history: ['grey', 'grey', 'grey', 'grey', 'grey'],
+        history: [undefined, undefined, undefined, undefined, undefined],
         secondary: [],
     }
     selectedColor: string;
@@ -61,7 +61,7 @@ export class Menu {
             DOMItem.className = "color" + (colorListName === 'secondary' ? ' secondary-color' : '');
             DOMItem.id = color;
             DOMItem.dataset.color = color;
-            DOMItem.style.backgroundColor = color;
+            DOMItem.style.backgroundColor = color ? color : 'darkgrey';
             DOMItem.addEventListener('click', (e: MouseEvent) => {
                 const target = e.target as HTMLElement;
                 this.setSelectedColor(target.id)
@@ -76,9 +76,44 @@ export class Menu {
             this.selectedColor = color;
             this.emit('colorChange', this.selectedColor);
             this.setSelectedColorDisplay();
+            this.editHistory();
         }
     }
 
+    //! Lame paramter...
+    private editHistory() {
+        let history = this.allColorList.history
+        const selectedColorindexInHistory = history.indexOf(this.selectedColor);
+        if (selectedColorindexInHistory === -1) {
+            history.splice(0, 0, this.selectedColor);
+            console.log('history I => ', history);
+            history.pop();
+
+        } else {
+            history.splice(selectedColorindexInHistory, 1);
+            history.splice(0, 0, this.selectedColor);
+            console.log('history II => ', history);
+
+        }
+        this.editHistoryDisplay();
+    }
+
+    private editHistoryDisplay() {
+        this.resetHistory();
+        this.displayColorsOptions('history');
+        // console.log('historyContainer => ', target);
+
+        // target.childNodes.forEach((node: HTMLElement, i) => {
+        //     node.style.backgroundColor = this.allColorList.history[i];
+        // })
+    }
+
+    private resetHistory() {
+        const target: HTMLElement = document.querySelector('#history-color-container');
+        while (target.firstChild) {
+            target.removeChild(target.firstChild)
+        }
+    }
     private setSelectedColorDisplay() {
         const domColors: HTMLCollection = document.getElementsByClassName('color');
         for (const domColor of domColors) {

@@ -102,7 +102,7 @@ label {
   border-width: 1px;
 }
 .color.disabled {
-  color: ;
+  color: black;
 }
 .color:not(.selected):hover {
   transform: scale(1.3);
