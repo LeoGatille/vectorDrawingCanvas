@@ -40,8 +40,10 @@ label {
 
 #additional-content {
   transition: height ease-in-out 0.2s;
+  display: flex;
+  justify-content: space-between;
   height: 0px;
-  width: 50%;
+  width: 90%;
   overflow-y: scroll;
   overflow-x: hidden;
   background: rgb(63, 79, 87);

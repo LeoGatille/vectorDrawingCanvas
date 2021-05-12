@@ -38,7 +38,8 @@ export class Menu {
         this.emit('redo');
     }
     private setSmoothing(val: number) {
-        this.emit('smoothingChange');
+        console.log('smoothing => ', val);
+        this.emit('smoothingChange', val);
     }
     private mouseEnter() {
         this.emit('mouseEnterMenu');
@@ -130,7 +131,7 @@ export class Menu {
         document.querySelector('#redo').addEventListener('click', () => this.redo());
         document.querySelector('#settings').addEventListener('mouseenter', () => this.mouseEnter());
         document.querySelector('#settings').addEventListener('mouseleave', () => this.mouseLeave());
-        // document.querySelector('#smoothingRange').addEventListener('input', (e: any) => this.setSmoothing(parseInt(e.srcElement.value, 10)));
+        document.querySelector('#smoothingRange').addEventListener('input', (e: any) => this.setSmoothing(parseInt(e.srcElement.value, 10)));
     }
 }
 const CSS_COLOR_NAMES = [

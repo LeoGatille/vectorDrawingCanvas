@@ -22,9 +22,9 @@ function init() {
     window.addEventListener('mouseLeaveMenu', () => canvas.toggleLockCanvas());
 
     //! Has a any type !
-    window.addEventListener('smoothingChange', (smoothingValue: any) => canvas.setSmoothing(smoothingValue));
+    window.addEventListener('smoothingChange', (smoothingValue: any) => canvas.setSmoothing(smoothingValue.detail));
     window.addEventListener('colorChange', (e: any) => canvas.setColor(e.detail));
-    
+
     //! Has a any type !
     window.addEventListener('expand', (e: any) => menu.setExpansion(e.detail))
 

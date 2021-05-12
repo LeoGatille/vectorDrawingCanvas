@@ -56,6 +56,7 @@ export default class CanvasWindow {
     }
     public setSmoothing(value: number) {
         this.smoothing = value;
+        console.log('realSmoothing => ', this.smoothing);
     }
     public toggleLockCanvas() {
         this.isLocked = !this.isLocked;
