@@ -28,6 +28,9 @@ function init() {
     //! Has a any type !
     window.addEventListener('expand', (e: any) => menu.setExpansion(e.detail))
 
+    window.addEventListener('addPath', () => menu.addActionToHistory());
+    
+
 }
 
 

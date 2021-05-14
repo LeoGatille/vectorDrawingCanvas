@@ -1,3 +1,4 @@
+import { HistoryAction } from './Types/HistoryActions';
 import { ExpansionBtn } from './ExpansionBtn';
 import { Color } from './Types/Color';
 import { Utils } from "./Utils";
@@ -12,6 +13,9 @@ export class Menu {
         this.setSelectedColor();
         this.expansionBtn = new ExpansionBtn(document.querySelector('#menu-expansion-controller'));
     }
+    historyActionBtn = { undo: document.querySelector('#undo'), redo: document.querySelector('#redo') };
+    undoHistory: number = 0;
+    redoHistory: number = 0;
     domSettings: HTMLElement = document.querySelector('#settings');
     additionalContent: HTMLElement = document.querySelector('#additional-content');
     expansionBtn: ExpansionBtn;
@@ -31,26 +35,75 @@ export class Menu {
         }
     }
 
-    private undo() {
-        this.emit('undo');
-    }
-    private redo() {
-        this.emit('redo');
-    }
-    private setSmoothing(val: number) {
-        console.log('smoothing => ', val);
-        this.emit('smoothingChange', val);
-    }
-    private mouseEnter() {
-        this.emit('mouseEnterMenu');
-    }
-    private mouseLeave() {
-        this.emit('mouseLeaveMenu');
+    public addActionToHistory() {
+        this.undoHistory++;
+        this.redoHistory = 0;
+
+        this.setUndoRedoStyle();
     }
 
-    private emit(eventType: string, val: any = null) {
-        const customEvent = new CustomEvent(eventType, val ? { detail: val } : null);
-        window.dispatchEvent(customEvent);
+    public removeActionHistory(action: HistoryAction) {
+        this.redoHistory = action();
+    }
+
+    public undo() {
+        if (!this.undoHistory) return;
+
+        Utils.emit('undo');
+        this.undoHistory--;
+        this.redoHistory++;
+
+        this.setUndoRedoStyle();
+    }
+    public redo() {
+        if (!this.redoHistory) return;
+
+        Utils.emit('redo');
+        this.undoHistory++;
+        this.redoHistory--;
+
+        this.setUndoRedoStyle();
+    }
+
+
+    private setSmoothing(val: number) {
+        console.log('smoothing => ', val);
+        Utils.emit('smoothingChange', val);
+    }
+
+    private mouseEnter() {
+        Utils.emit('mouseEnterMenu');
+    }
+
+    private mouseLeave() {
+        Utils.emit('mouseLeaveMenu');
+    }
+
+    private setUndoRedoStyle() {
+        for (const id in this.historyActionBtn) {
+            const node: HTMLElement = this.historyActionBtn[id];
+            this.toggleHistoryActionBtnClass(node, !!this[id + 'History']);
+        }
+        console.log('Hey');
+
+    }
+
+    private toggleHistoryActionBtnClass(node: HTMLElement, enabled: boolean) {
+        const classList = node.classList;
+        //? Big condition might be useless if I think more of what can happen when triggering on btn
+        if (enabled) {
+            if (classList.contains('disabled')) {
+                console.log('shouldBeEnabled');
+
+                classList.remove('disabled');
+                classList.add('enabled');
+            }
+        } else {
+            if (classList.contains('enabled')) {
+                classList.remove('enabled');
+                classList.add('disabled');
+            }
+        }
     }
 
     private displayColorsOptions(colorListName: string) {
@@ -75,13 +128,12 @@ export class Menu {
     private setSelectedColor(color: string = 'black') {
         if (this.selectedColor !== color) {
             this.selectedColor = color;
-            this.emit('colorChange', this.selectedColor);
+            Utils.emit('colorChange', this.selectedColor);
             this.setSelectedColorDisplay();
             this.editHistory();
         }
     }
 
-    //! Lame paramter...
     private editHistory() {
         let history = this.allColorList.history
         const selectedColorindexInHistory = history.indexOf(this.selectedColor);
@@ -102,18 +154,12 @@ export class Menu {
     private editHistoryDisplay() {
         this.resetHistory();
         this.displayColorsOptions('history');
-        // console.log('historyContainer => ', target);
-
-        // target.childNodes.forEach((node: HTMLElement, i) => {
-        //     node.style.backgroundColor = this.allColorList.history[i];
-        // })
     }
 
     private resetHistory() {
         const target: HTMLElement = document.querySelector('#history-color-container');
-        while (target.firstChild) {
-            target.removeChild(target.firstChild)
-        }
+        while (target.firstChild) target.removeChild(target.firstChild);
+
     }
     private setSelectedColorDisplay() {
         const domColors: HTMLCollection = document.getElementsByClassName('color');

@@ -1,5 +1,6 @@
 import Coordinate from './Coordinate';
 import Drawing from './Drawing';
+import { Utils } from './Utils';
 
 export default class CanvasWindow {
     constructor() {
@@ -69,6 +70,7 @@ export default class CanvasWindow {
 
             this.draw();
         }
+        return this.drawings.length;
     }
     public setFrameToSkip(val) {
         if (((this.smoothing + val) > 0) && ((this.smoothing + val) < 70)) {
@@ -154,6 +156,7 @@ export default class CanvasWindow {
             this.finishDrawing(event);
         }
         this.isDrawing = false;
+        Utils.emit('addPath');
     }
 
     private finishDrawing(event: MouseEvent) {
