@@ -1,14 +1,16 @@
 import Coordinate from './Coordinate';
 export default class Drawing {
-    constructor(originPoint: Coordinate, ctx: CanvasRenderingContext2D, color: string = 'black') {
+    constructor(originPoint: Coordinate, ctx: CanvasRenderingContext2D, weight: number, color: string = 'black',) {
         this.color = color;
         this.ctx = ctx;
+        this.weight = weight;
         // this.originPoint = originPoint;
 
 
         this.addCoordinate({ posX: originPoint.x, posY: originPoint.y });
         this.addUglyCoordinate({ posX: originPoint.x, posY: originPoint.y });
     }
+    weight: number;
     color: string;
     ctx: CanvasRenderingContext2D;
     originPoint: Coordinate;
@@ -43,8 +45,7 @@ export default class Drawing {
             //     // }
         })
     }
-
-
+    
     public drawUgly() {
         this.initPath();
         this.createUglyPath();
@@ -95,7 +96,7 @@ export default class Drawing {
         this.ctx.beginPath();
         this.ctx.lineCap = 'round';
         this.ctx.lineJoin = 'round';
-        this.ctx.lineWidth = 5
+        this.ctx.lineWidth = this.weight
     }
 
     protected createPath() {

@@ -13,6 +13,7 @@ export class Menu {
         this.setSelectedColor();
         this.expansionBtn = new ExpansionBtn(document.querySelector('#menu-expansion-controller'));
     }
+    lineWeight: number = 4;
     historyActionBtn = { undo: document.querySelector('#undo'), redo: document.querySelector('#redo') };
     undoHistory: number = 0;
     redoHistory: number = 0;
@@ -84,8 +85,6 @@ export class Menu {
             const node: HTMLElement = this.historyActionBtn[id];
             this.toggleHistoryActionBtnClass(node, !!this[id + 'History']);
         }
-        console.log('Hey');
-
     }
 
     private toggleHistoryActionBtnClass(node: HTMLElement, enabled: boolean) {
@@ -172,12 +171,20 @@ export class Menu {
         }
     }
 
+    private setLineWeight(value: number) {
+        console.log('COUOU');
+
+        this.lineWeight = value;
+        Utils.emit('lineWeightChange', this.lineWeight);
+    }
+
     private setEventListeners() {
         document.querySelector('#undo').addEventListener('click', () => this.undo());
         document.querySelector('#redo').addEventListener('click', () => this.redo());
         document.querySelector('#settings').addEventListener('mouseenter', () => this.mouseEnter());
         document.querySelector('#settings').addEventListener('mouseleave', () => this.mouseLeave());
         document.querySelector('#smoothingRange').addEventListener('input', (e: any) => this.setSmoothing(parseInt(e.srcElement.value, 10)));
+        document.querySelector('#lineWheight').addEventListener('input', (e: any) => this.setLineWeight(parseInt(e.srcElement.value, 10)));
     }
 }
 const CSS_COLOR_NAMES = [

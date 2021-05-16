@@ -47,6 +47,8 @@ export default class CanvasWindow {
 
     public color: string = 'black';
     public smoothing: number = 5;
+    //! Does it needs to be public ???
+    public lineWeight: number = 4;
     public lastFrameTimestamp: 0;
     public canceledPaths: Drawing[] = [];
 
@@ -55,10 +57,16 @@ export default class CanvasWindow {
     public setColor(color: string) {
         this.color = color;
     }
+
     public setSmoothing(value: number) {
         this.smoothing = value;
-        console.log('realSmoothing => ', this.smoothing);
     }
+
+    public setLineWeight(value: number) {
+        console.log('wtf => ', value);
+        this.lineWeight = value;
+    }
+
     public toggleLockCanvas() {
         this.isLocked = !this.isLocked;
     }
@@ -90,7 +98,9 @@ export default class CanvasWindow {
 
     private initDrawing(event: MouseEvent) {
         this.isDrawing = true;
-        this.drawings.push(new Drawing(new Coordinate(this.getCanvasRelatedCoordinates(event)), this.ctx, this.color));
+        console.log('initDrawing lineWeight => ', this.lineWeight);
+
+        this.drawings.push(new Drawing(new Coordinate(this.getCanvasRelatedCoordinates(event)), this.ctx, this.lineWeight, this.color));
     }
 
     private getCanvasRelatedCoordinates(event: MouseEvent) {
@@ -99,26 +109,6 @@ export default class CanvasWindow {
             posY: event.pageY - this.canvasPosTop,
         }
     }
-
-    // private recordMouseMove(event: MouseEvent) {
-    //     if (!this.isDrawing) return
-
-    //     const currentDrawing = this.drawings[this.drawings.length - 1]
-    //     if (this.skipFrame === 0) {
-    //         // this.clearCanvas()
-
-    //         currentDrawing.addCoordinate(this.getCanvasRelatedCoordinates(event));
-    //         currentDrawing.removeUglyPath();
-    //         this.skipFrame = this.smoothing;
-    //     } else {
-    //         currentDrawing.addUglyCoordinate(this.getCanvasRelatedCoordinates(event));
-    //         this.skipFrame--;
-    //     }
-    //     // this.frameRequest = requestAnimationFrame(() => {
-
-    //     this.draw();
-    //     // });
-    // }
 
     private recordMouseMove(event: MouseEvent) {
         if (!this.isDrawing) return
@@ -146,6 +136,7 @@ export default class CanvasWindow {
         this.singleDotList.forEach(coordinate => {
             this.ctx.beginPath();
             this.ctx.arc(coordinate.x, coordinate.y, 3, 0, 2 * Math.PI);
+            console.debug(this.color);
             this.ctx.fillStyle = this.color;
             this.ctx.fill();
         })

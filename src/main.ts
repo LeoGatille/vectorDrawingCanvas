@@ -5,13 +5,6 @@ import CanvasWindow from "./CanvasWindow";
 document.addEventListener('DOMContentLoaded', () => init());
 
 function init() {
-    const allColorList = {
-        main: ['black', 'white', 'blue', 'red', 'green', 'yellow', 'orange'],
-        custom: [],
-        history: [],
-        secondary: ['pink', 'purple'],
-    }
-
     const canvas = new CanvasWindow();
     const menu = new Menu();
 
@@ -21,16 +14,13 @@ function init() {
     window.addEventListener('mouseEnterMenu', () => canvas.toggleLockCanvas());
     window.addEventListener('mouseLeaveMenu', () => canvas.toggleLockCanvas());
 
-    //! Has a any type !
-    window.addEventListener('smoothingChange', (smoothingValue: any) => canvas.setSmoothing(smoothingValue.detail));
-    window.addEventListener('colorChange', (e: any) => canvas.setColor(e.detail));
+    window.addEventListener('smoothingChange', (smoothingValue: CustomEvent) => canvas.setSmoothing(smoothingValue.detail));
+    window.addEventListener('lineWeightChange', (lineWeight: CustomEvent) => canvas.setLineWeight(lineWeight.detail));
+    window.addEventListener('colorChange', (e: CustomEvent) => canvas.setColor(e.detail));
 
-    //! Has a any type !
-    window.addEventListener('expand', (e: any) => menu.setExpansion(e.detail))
+    window.addEventListener('expand', (e: CustomEvent) => menu.setExpansion(e.detail))
 
     window.addEventListener('addPath', () => menu.addActionToHistory());
-    
-
 }
 
 
